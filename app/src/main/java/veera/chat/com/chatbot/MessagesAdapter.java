@@ -1,7 +1,7 @@
 package veera.chat.com.chatbot;
 
+import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,22 +12,22 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     private final int MESSAGE_SENT = 2;
     private final int MESSAGE_RECEIVED = 1;
-    private SparseArray<ChatMessage> messageHashMap;
+    private Cursor cursor;
 
 
     public MessagesAdapter() {
-        messageHashMap = new SparseArray<>();
+
     }
 
-    public void setMessages(SparseArray<ChatMessage> messageHashMap) {
-        this.messageHashMap = messageHashMap;
+    public void setMessages(Cursor cursor) {
+        this.cursor = cursor;
         notifyDataSetChanged();
     }
 
     @Override
     public int getItemViewType(int position) {
-        ChatMessage message = messageHashMap.get(position);
-        switch (message.getType()) {
+        cursor.moveToPosition(position);
+        switch (cursor.getInt(4)) {
             case 1:
                 return MESSAGE_RECEIVED;
             case 2:
@@ -59,15 +59,15 @@ public class MessagesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MessageHolder) {
-            ChatMessage message = messageHashMap.get(position);
+            String message = cursor.getString(1);
             MessageHolder viewHolder = (MessageHolder) holder;
-            viewHolder.message.setText(message.getMessage());
+            viewHolder.message.setText(message);
         }
     }
 
     @Override
     public int getItemCount() {
-        return messageHashMap != null ? messageHashMap.size() : 0;
+        return cursor != null ? cursor.getCount() : 0;
     }
 
     public class MessageHolder extends RecyclerView.ViewHolder {

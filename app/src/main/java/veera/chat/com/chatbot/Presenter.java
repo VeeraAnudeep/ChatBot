@@ -28,10 +28,7 @@ public class Presenter extends MVPBasePresenter<ChatView> {
             public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
                 if (isViewAlive()) {
                     if (response.isSuccessful() && response.body().getSuccess() == 1) {
-                        ChatMessage message = new ChatMessage();
-                        message.setType(1);
-                        message.setMessage(response.body().getMessage().getMessage());
-                        getView().setMessages(message);
+                        getView().setMessages(response.body().getMessage().getMessage(),1);
                     }
                 }
             }
