@@ -30,13 +30,14 @@
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/footer"
+            android:layout_above="@+id/shadow"
             android:clipToPadding="false"
             android:paddingTop="@dimen/margin_padding_normal"
             app:reverseLayout="true"
             tools:listitem="@layout/p_chat_send_item" />
 
         <View
+            android:id="@+id/shadow"
             android:layout_width="match_parent"
             android:layout_height="3dp"
             android:layout_above="@+id/footer"
