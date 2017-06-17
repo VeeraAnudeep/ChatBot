@@ -31,9 +31,6 @@ public class ServiceHelper {
             }
 
             OkHttpClient.Builder httpClientBuilder = new OkHttpClient.Builder();
-            httpClientBuilder.connectTimeout(30, TimeUnit.SECONDS);
-            httpClientBuilder.readTimeout(30, TimeUnit.SECONDS);
-            httpClientBuilder.writeTimeout(30, TimeUnit.SECONDS);
             httpClientBuilder.addInterceptor(logging);
 
             instance = new Retrofit

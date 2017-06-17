@@ -1,6 +1,8 @@
 package veera.chat.com.chatbot;
 
+import android.app.NotificationManager;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -24,7 +26,6 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
     ImageView sendMessage;
 
     private MessagesAdapter messagesAdapter;
-    private SparseArray<ChatMessage> messageSparseArray;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +45,7 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
 
     @Override
     public Presenter getNewPresenter() {
-        ApiService apiService = ServiceHelper.createService(ApiService.class, ServiceHelper.getRetrofitInstance());
-        return new Presenter(apiService);
+        return new Presenter();
     }
 
     @Override
@@ -64,15 +64,30 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
                 if (!TextUtils.isEmpty(messageToSend)) {
                     setMessages(messageToSend, 2);
                     editText.setText("");
-                    getPresenter().sendMessage(messageToSend);
+                    Cursor cursor = getContentResolver().query(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI
+                            , null, "message=?", new String[]{messageToSend}, null);
+                    if (cursor != null) {
+                        cursor.moveToFirst();
+                        getPresenter().sendMessage(messageToSend, cursor.getInt(0));
+                        cursor.close();
+                    }
                 }
                 break;
         }
     }
 
     @Override
-    public void messageNotSent() {
-
+    public void messageNotSent(int id, int isSent) {
+        Cursor cursor = getContentResolver().query(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI
+                , null, "_id=?", new String[]{String.valueOf(id)}, null);
+        if (cursor != null) {
+            cursor.moveToFirst();
+            ContentValues values = new ContentValues();
+            values.put(ChatContract.ChatMessageEntry.COLUMN_MESSAGE_STATUS, isSent);
+            getContentResolver().update(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI,
+                    values, "_id=?", new String[]{String.valueOf(id)});
+            cursor.close();
+        }
     }
 
     @Override
@@ -92,5 +107,12 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        NotificationManager nMgr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        nMgr.cancelAll();
     }
 }
