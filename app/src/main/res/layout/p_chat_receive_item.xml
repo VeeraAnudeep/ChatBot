@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:layout_marginLeft="@dimen/margin_padding_normal"
+    android:background="@drawable/ic_chat_recieve_bubble"
+    android:gravity="start">
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical|start"
+        android:maxWidth="250dp"
+        android:paddingBottom="5dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="4dp"
+        android:textColor="#212121"
+        android:textSize="14sp"
+        tools:text="Hey How are you doing?" />
+
+</FrameLayout>
