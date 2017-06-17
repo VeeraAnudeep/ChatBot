@@ -12,11 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import veera.chat.com.chatbot.dbManager.ChatContract;
 import veera.chat.com.chatbot.mvp.MVPBaseActivity;
 
 public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView, View.OnClickListener, LoaderManager.LoaderCallbacks<Cursor> {
@@ -48,6 +48,9 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
         return new Presenter();
     }
 
+    /**
+     * Storing messages in the Local DB
+     * */
     @Override
     public void setMessages(String chatMessage, int type) {
         ContentValues values = new ContentValues();
@@ -56,6 +59,9 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
         getContentResolver().insert(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI, values);
     }
 
+    /**
+     * Fetch ID of the message stored and send to server along with ID in order to update message delivery status
+     * */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -76,8 +82,11 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
         }
     }
 
+    /**
+     * Updating the delivery status of message based on its id
+     * */
     @Override
-    public void messageNotSent(int id, int isSent) {
+    public void messageStatusUpdate(int id, int isSent) {
         Cursor cursor = getContentResolver().query(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI
                 , null, "_id=?", new String[]{String.valueOf(id)}, null);
         if (cursor != null) {
@@ -109,6 +118,9 @@ public class MainActivity extends MVPBaseActivity<Presenter> implements ChatView
 
     }
 
+    /**
+     * To clear Notifications on opening the App
+     * */
     @Override
     protected void onResume() {
         super.onResume();

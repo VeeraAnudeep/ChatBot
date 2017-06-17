@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
-import veera.chat.com.chatbot.ChatDbHelper;
+import veera.chat.com.chatbot.dbManager.ChatDbHelper;
 import veera.chat.com.chatbot.dbManager.constants.DBConstants;
 import veera.chat.com.chatbot.dbManager.dbHelper.BaseDbHelper;
 

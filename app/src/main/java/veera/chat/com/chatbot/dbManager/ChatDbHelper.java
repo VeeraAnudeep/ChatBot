@@ -1,4 +1,4 @@
-package veera.chat.com.chatbot;
+package veera.chat.com.chatbot.dbManager;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -19,6 +19,16 @@ public class ChatDbHelper extends BaseDbHelper {
     public ChatDbHelper(Context context, String dbName) {
         super(context, dbName, DATABASE_VERSION);
     }
+
+
+    /**
+     * @Message Status is to keep track of the delivery of messages to server
+     * @Type is to distinguish between server and user messages
+     * @SentOn can be used later on to show timestamp if necessary
+     * @BOT_ID can be used if chat in case of different BOTS
+     * @Message is the actual message to be shown
+     * @_ID is the unique identifier for a message
+     * */
 
     @Override
     public void onCreate(SQLiteDatabase db) {

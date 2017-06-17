@@ -29,7 +29,7 @@
             android:authorities="chatBot"
             android:exported="false" />
         <receiver
-            android:name=".ConnectivityBroadCast"
+            android:name=".receivers.ConnectivityBroadCast"
             android:enabled="true">
             <intent-filter>
 

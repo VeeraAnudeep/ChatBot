@@ -1,10 +1,11 @@
-package veera.chat.com.chatbot;
+package veera.chat.com.chatbot.api;
 
 import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.QueryMap;
+import veera.chat.com.chatbot.ChatResponse;
 
 
 public interface ApiService {

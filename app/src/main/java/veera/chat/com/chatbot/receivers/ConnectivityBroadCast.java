@@ -1,4 +1,4 @@
-package veera.chat.com.chatbot;
+package veera.chat.com.chatbot.receivers;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -20,8 +20,15 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import veera.chat.com.chatbot.ChatResponse;
+import veera.chat.com.chatbot.MainActivity;
+import veera.chat.com.chatbot.R;
+import veera.chat.com.chatbot.api.ApiService;
+import veera.chat.com.chatbot.api.ServiceHelper;
+import veera.chat.com.chatbot.dbManager.ChatContract;
 
 public class ConnectivityBroadCast extends BroadcastReceiver {
+    private static boolean isRequestInProcess = false;
     private Context context;
 
     public ConnectivityBroadCast() {
@@ -32,27 +39,27 @@ public class ConnectivityBroadCast extends BroadcastReceiver {
         this.context = context;
         try {
 
-            // If it is visible then trigger the task else do nothing
             ConnectivityManager connectivityManager = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo networkInfo = connectivityManager
                     .getActiveNetworkInfo();
 
-            // Check internet connection and accrding to state change the
-            // text of activity by calling method
             if (networkInfo != null && networkInfo.isConnected()) {
-                Cursor cursor = context.getContentResolver().query(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI
-                        , null, "message_status=?", new String[]{"0"}, null);
-                ApiService apiService = ServiceHelper.createService(ApiService.class, ServiceHelper.getRetrofitInstance());
-                if (cursor != null) {
-                    while (cursor.moveToNext()) {
-                        Map<String, String> params = new HashMap<>();
-                        params.put("apiKey", "6nt5d1nJHkqbkphe");
-                        params.put("chatBotID", "63906");
-                        params.put("externalID", "chirag1");
-                        params.put("message", cursor.getString(1));
-                        Call<ChatResponse> sendMessageCall = apiService.sendChatMessage(params);
-                        sendMessageCall.enqueue(new ResponseListener(cursor.getInt(0)));
+                if (!isRequestInProcess) {
+                    Cursor cursor = context.getContentResolver().query(ChatContract.ChatMessageEntry.CHAT_MESSAGE_URI
+                            , null, "message_status=?", new String[]{"0"}, null);
+                    ApiService apiService = ServiceHelper.createService(ApiService.class, ServiceHelper.getRetrofitInstance());
+                    if (cursor != null) {
+                        while (cursor.moveToNext()) {
+                            Map<String, String> params = new HashMap<>();
+                            params.put("apiKey", "6nt5d1nJHkqbkphe");
+                            params.put("chatBotID", "63906");
+                            params.put("externalID", "chirag1");
+                            params.put("message", cursor.getString(1));
+                            Call<ChatResponse> sendMessageCall = apiService.sendChatMessage(params);
+                            isRequestInProcess = true;
+                            sendMessageCall.enqueue(new ResponseListener(cursor.getInt(0)));
+                        }
                     }
                     cursor.close();
                 }
@@ -114,6 +121,7 @@ public class ConnectivityBroadCast extends BroadcastReceiver {
 
         @Override
         public void onResponse(Call<ChatResponse> call, Response<ChatResponse> response) {
+            isRequestInProcess = false;
             if (response.isSuccessful() && response.body() != null) {
                 insertRespone(response.body().getMessage().getMessage(), id);
             }
@@ -121,7 +129,7 @@ public class ConnectivityBroadCast extends BroadcastReceiver {
 
         @Override
         public void onFailure(Call<ChatResponse> call, Throwable t) {
-
+            isRequestInProcess = false;
         }
     }
 }

@@ -1,4 +1,4 @@
-package veera.chat.com.chatbot;
+package veera.chat.com.chatbot.dbManager;
 
 import android.net.Uri;
 import android.provider.BaseColumns;

@@ -3,7 +3,7 @@ package veera.chat.com.chatbot.dbManager.contentProvider;
 import android.content.UriMatcher;
 import android.net.Uri;
 
-import veera.chat.com.chatbot.ChatContract;
+import veera.chat.com.chatbot.dbManager.ChatContract;
 import veera.chat.com.chatbot.dbManager.constants.DBConstants;
 
 public class Matcher {

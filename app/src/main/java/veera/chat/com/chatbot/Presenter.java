@@ -6,6 +6,8 @@ import java.util.Map;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import veera.chat.com.chatbot.api.ApiService;
+import veera.chat.com.chatbot.api.ServiceHelper;
 import veera.chat.com.chatbot.mvp.MVPBasePresenter;
 
 
@@ -38,7 +40,7 @@ public class Presenter extends MVPBasePresenter<ChatView> {
             if (isViewAlive()) {
                 if (response.isSuccessful() && response.body() != null && response.body().getSuccess() == 1) {
                     getView().setMessages(response.body().getMessage().getMessage(), 1);
-                    getView().messageNotSent(id,1);
+                    getView().messageStatusUpdate(id,1);
                 }
             }
         }
@@ -46,7 +48,7 @@ public class Presenter extends MVPBasePresenter<ChatView> {
         @Override
         public void onFailure(Call<ChatResponse> call, Throwable t) {
             if (isViewAlive()) {
-                getView().messageNotSent(id,0);
+                getView().messageStatusUpdate(id,0);
             }
         }
     }

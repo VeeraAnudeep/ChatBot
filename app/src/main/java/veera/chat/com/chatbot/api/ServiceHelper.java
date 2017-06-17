@@ -1,4 +1,4 @@
-package veera.chat.com.chatbot;
+package veera.chat.com.chatbot.api;
 
 import com.google.gson.GsonBuilder;
 
@@ -8,6 +8,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import veera.chat.com.chatbot.BuildConfig;
 
 
 public class ServiceHelper {
